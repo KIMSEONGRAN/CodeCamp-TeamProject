@@ -1,6 +1,6 @@
+import { v4 } from 'uuid';
 import * as bcrypt from 'bcryptjs';
 import { ConflictException, Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 
 import { IUser } from '../../commons/interfaces/User.interface';
 import { MESSAGES } from '../../commons/message/Message.enum';
@@ -142,9 +142,9 @@ export class UserService {
 
         const newUser = this.userRepository.create({
             ...userInfo,
-            nickName: userInfo.name,
+            nickName: v4(),
             phone: null,
-            pwd: this.createPassword(randomUUID()),
+            pwd: this.createPassword(v4()),
         });
 
         // 핸드폰 인증 체크
@@ -168,6 +168,29 @@ export class UserService {
         const result = await this.userRepository.save(newUser);
 
         return result;
+    }
+
+    async socialAuth(dto: {
+        userID: string;
+        nickName: string;
+        phone: string;
+    }): Promise<UserEntity> {
+        // 이메일, 닉네임 중복 체크
+        await this.checkOverlapNickName(dto.nickName);
+
+        // 회원 찾기
+        const user = await this.userRepository.findOneByID(dto.userID);
+
+        // 핸드폰 인증 체크
+        const authPhone = await this.phoneService.create(dto.phone, user);
+
+        // 닉네임 변경
+        return await this.userRepository.save({
+            ...user,
+            nickName: dto.nickName,
+            phone: dto.phone,
+            authPhone: authPhone,
+        });
     }
 
     ///////////////////////////////////////////////////////////////////
