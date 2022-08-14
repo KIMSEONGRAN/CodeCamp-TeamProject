@@ -28,7 +28,6 @@ https://github.com/MinyShrimp
     -   태그 : NovelTag
     -   리뷰 : NovelReview
     -   에피소드 : NovelIndex
-    -   에피소드 리뷰 : NovelIndexReview
     -   후원작 : NovelDonate
     -   선호작 : NovelLike
 -   결제
@@ -46,6 +45,7 @@ https://github.com/KIMSEONGRAN
 -   게시판 : Board
 -   게시판 댓글 : Comment
 -   공지 : Notice
+-   에피소드 리뷰 : NovelIndexReview
 -   이벤트 : Event
 -   문의 : Question
 -   답변 : Answer
